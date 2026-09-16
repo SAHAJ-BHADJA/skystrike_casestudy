@@ -1,0 +1,263 @@
+{
+  "success": true,
+  "note": "Bundled sample data in raw JamBase /events shape. Used only when no JAMBASE_API_KEY is set, so the app runs with zero setup. Dates are illustrative.",
+  "pagination": { "page": 1, "perPage": 9, "totalItems": 9, "totalPages": 1 },
+  "events": [
+    {
+      "identifier": "jambase:11500001",
+      "name": "Khruangbin",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "startDate": "2026-09-24T20:00:00",
+      "doorTime": "2026-09-24T19:00:00",
+      "url": "https://www.jambase.com/show/khruangbin-ryman-20260924",
+      "image": "https://picsum.photos/seed/khruangbin/640/360",
+      "isAccessibleForFree": false,
+      "location": {
+        "name": "Ryman Auditorium",
+        "maximumAttendeeCapacity": 2362,
+        "address": {
+          "streetAddress": "116 Rep. John Lewis Way N",
+          "addressLocality": "Nashville",
+          "addressRegion": "TN",
+          "postalCode": "37219",
+          "addressCountry": "US",
+          "x-timezone": "America/Chicago"
+        },
+        "geo": { "latitude": 36.1612, "longitude": -86.7784 }
+      },
+      "performer": [
+        { "name": "Khruangbin", "genre": ["funk", "psychedelic"], "url": "https://www.jambase.com/band/khruangbin" }
+      ],
+      "offers": [
+        { "priceSpecification": { "minPrice": 55, "maxPrice": 95, "priceCurrency": "USD" }, "seller": { "name": "Ryman Box Office" } }
+      ]
+    },
+    {
+      "identifier": "jambase:11500002",
+      "name": "Free Fridays: Local Jazz Showcase",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "startDate": "2026-09-18T18:30:00",
+      "url": "https://www.jambase.com/show/free-jazz-showcase-20260918",
+      "image": "https://picsum.photos/seed/jazz/640/360",
+      "isAccessibleForFree": true,
+      "location": {
+        "name": "Centennial Park Bandshell",
+        "maximumAttendeeCapacity": 800,
+        "address": {
+          "addressLocality": "Nashville",
+          "addressRegion": "TN",
+          "addressCountry": "US",
+          "x-timezone": "America/Chicago"
+        },
+        "geo": { "latitude": 36.1497, "longitude": -86.8130 }
+      },
+      "performer": [
+        { "name": "Music City Jazz Collective", "genre": ["jazz"] }
+      ],
+      "offers": []
+    },
+    {
+      "identifier": "jambase:11500003",
+      "name": "Turnpike Troubadours",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "startDate": "2026-10-11T19:30:00",
+      "doorTime": "2026-10-11T18:00:00",
+      "url": "https://www.jambase.com/show/turnpike-troubadours-20261011",
+      "image": "https://picsum.photos/seed/turnpike/640/360",
+      "isAccessibleForFree": false,
+      "location": {
+        "name": "Bridgestone Arena",
+        "maximumAttendeeCapacity": 19395,
+        "address": {
+          "streetAddress": "501 Broadway",
+          "addressLocality": "Nashville",
+          "addressRegion": "TN",
+          "postalCode": "37203",
+          "addressCountry": "US",
+          "x-timezone": "America/Chicago"
+        },
+        "geo": { "latitude": 36.1592, "longitude": -86.7785 }
+      },
+      "performer": [
+        { "name": "Turnpike Troubadours", "genre": ["country-music", "folk"] },
+        { "name": "The Wilder Blue", "genre": ["country-music"] }
+      ],
+      "offers": [
+        { "priceSpecification": { "minPrice": 49.5, "maxPrice": 129, "priceCurrency": "USD" } }
+      ]
+    },
+    {
+      "identifier": "jambase:11500004",
+      "name": "The Bluebird Sessions: Songwriters in the Round",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "startDate": "2026-09-20T21:00:00",
+      "url": "https://www.jambase.com/show/bluebird-sessions-20260920",
+      "image": "https://picsum.photos/seed/bluebird/640/360",
+      "isAccessibleForFree": false,
+      "location": {
+        "name": "The Bluebird Cafe",
+        "maximumAttendeeCapacity": 90,
+        "address": {
+          "streetAddress": "4104 Hillsboro Pike",
+          "addressLocality": "Nashville",
+          "addressRegion": "TN",
+          "postalCode": "37215",
+          "addressCountry": "US",
+          "x-timezone": "America/Chicago"
+        },
+        "geo": { "latitude": 36.1057, "longitude": -86.8177 }
+      },
+      "performer": [
+        { "name": "Lori McKenna", "genre": ["folk", "country-music"] },
+        { "name": "Barry Dean", "genre": ["country-music"] },
+        { "name": "Natalie Hemby", "genre": ["country-music"] }
+      ],
+      "offers": [
+        { "priceSpecification": { "price": 30, "priceCurrency": "USD" } }
+      ]
+    },
+    {
+      "identifier": "jambase:11500005",
+      "name": "Nashville EDM Warehouse: Rezz",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "startDate": "2026-10-31T22:00:00",
+      "doorTime": "2026-10-31T21:00:00",
+      "url": "https://www.jambase.com/show/rezz-warehouse-20261031",
+      "image": "https://picsum.photos/seed/rezz/640/360",
+      "isAccessibleForFree": false,
+      "location": {
+        "name": "Marathon Music Works",
+        "maximumAttendeeCapacity": 1500,
+        "address": {
+          "streetAddress": "1402 Clinton St",
+          "addressLocality": "Nashville",
+          "addressRegion": "TN",
+          "postalCode": "37203",
+          "addressCountry": "US",
+          "x-timezone": "America/Chicago"
+        },
+        "geo": { "latitude": 36.1637, "longitude": -86.8016 }
+      },
+      "performer": [
+        { "name": "Rezz", "genre": ["edm"] }
+      ],
+      "offers": [
+        { "priceSpecification": { "minPrice": 40, "maxPrice": 40, "priceCurrency": "USD" } }
+      ]
+    },
+    {
+      "identifier": "jambase:11500006",
+      "name": "Sunday Bluegrass Brunch",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "startDate": "2026-09-27T11:00:00",
+      "url": "https://www.jambase.com/show/bluegrass-brunch-20260927",
+      "image": "https://picsum.photos/seed/bluegrass/640/360",
+      "isAccessibleForFree": true,
+      "location": {
+        "name": "The Station Inn",
+        "maximumAttendeeCapacity": 150,
+        "address": {
+          "streetAddress": "402 12th Ave S",
+          "addressLocality": "Nashville",
+          "addressRegion": "TN",
+          "postalCode": "37203",
+          "addressCountry": "US",
+          "x-timezone": "America/Chicago"
+        },
+        "geo": { "latitude": 36.1533, "longitude": -86.7876 }
+      },
+      "performer": [
+        { "name": "The Cumberland Ramblers", "genre": ["bluegrass"] }
+      ],
+      "offers": []
+    },
+    {
+      "identifier": "jambase:11500007",
+      "name": "Vince Gill & Friends",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "startDate": "2026-11-14T20:00:00",
+      "doorTime": "2026-11-14T19:00:00",
+      "url": "https://www.jambase.com/show/vince-gill-20261114",
+      "image": "https://picsum.photos/seed/vincegill/640/360",
+      "isAccessibleForFree": false,
+      "location": {
+        "name": "Grand Ole Opry House",
+        "maximumAttendeeCapacity": 4400,
+        "address": {
+          "streetAddress": "2804 Opryland Dr",
+          "addressLocality": "Nashville",
+          "addressRegion": "TN",
+          "postalCode": "37214",
+          "addressCountry": "US",
+          "x-timezone": "America/Chicago"
+        },
+        "geo": { "latitude": 36.2065, "longitude": -86.6924 }
+      },
+      "performer": [
+        { "name": "Vince Gill", "genre": ["country-music"] }
+      ],
+      "offers": [
+        { "priceSpecification": { "minPrice": 60, "maxPrice": 150, "priceCurrency": "USD" } }
+      ]
+    },
+    {
+      "identifier": "jambase:11500008",
+      "name": "Indie Night: Faye Webster",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "startDate": "2026-09-19T20:00:00",
+      "doorTime": "2026-09-19T19:00:00",
+      "url": "https://www.jambase.com/show/faye-webster-20260919",
+      "image": "https://picsum.photos/seed/fayewebster/640/360",
+      "isAccessibleForFree": false,
+      "location": {
+        "name": "Brooklyn Bowl Nashville",
+        "maximumAttendeeCapacity": 1200,
+        "address": {
+          "streetAddress": "925 3rd Ave N",
+          "addressLocality": "Nashville",
+          "addressRegion": "TN",
+          "postalCode": "37201",
+          "addressCountry": "US",
+          "x-timezone": "America/Chicago"
+        },
+        "geo": { "latitude": 36.1798, "longitude": -86.7899 }
+      },
+      "performer": [
+        { "name": "Faye Webster", "genre": ["indie", "folk"] }
+      ],
+      "offers": [
+        { "priceSpecification": { "minPrice": 38, "maxPrice": 45, "priceCurrency": "USD" } }
+      ]
+    },
+    {
+      "identifier": "jambase:11500009",
+      "name": "Harvest Roots Festival (2-Day Pass)",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "startDate": "2026-10-03T13:00:00",
+      "endDate": "2026-10-04T23:00:00",
+      "url": "https://www.jambase.com/festival/harvest-roots-2026",
+      "image": "https://picsum.photos/seed/harvest/640/360",
+      "isAccessibleForFree": false,
+      "location": {
+        "name": "Riverfront Park",
+        "maximumAttendeeCapacity": 12000,
+        "address": {
+          "addressLocality": "Nashville",
+          "addressRegion": "TN",
+          "addressCountry": "US",
+          "x-timezone": "America/Chicago"
+        },
+        "geo": { "latitude": 36.1655, "longitude": -86.7743 }
+      },
+      "performer": [
+        { "name": "Tyler Childers", "genre": ["country-music", "folk"] },
+        { "name": "Sierra Ferrell", "genre": ["folk", "bluegrass"] },
+        { "name": "Charley Crockett", "genre": ["country-music"] },
+        { "name": "The War and Treaty", "genre": ["blues"] }
+      ],
+      "offers": [
+        { "priceSpecification": { "minPrice": 189, "maxPrice": 450, "priceCurrency": "USD" } }
+      ]
+    }
+  ]
+}

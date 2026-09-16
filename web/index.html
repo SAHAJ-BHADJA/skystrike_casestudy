@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Local Events · Discover shows near you</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◎</span>
+      <div>
+        <h1>Local Events</h1>
+        <p>Find upcoming shows worth going to</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <form id="search-form" class="search-card" autocomplete="off">
+      <div class="field grow">
+        <label for="city">City</label>
+        <input id="city" name="city" placeholder="e.g. Nashville" value="Nashville" />
+      </div>
+      <div class="field small">
+        <label for="state">State</label>
+        <input id="state" name="state" placeholder="TN" maxlength="3" value="TN" />
+      </div>
+      <div class="field">
+        <label for="date_from">From</label>
+        <input id="date_from" name="date_from" type="date" />
+      </div>
+      <div class="field">
+        <label for="date_to">To</label>
+        <input id="date_to" name="date_to" type="date" />
+      </div>
+      <div class="field">
+        <label for="genre">Genre</label>
+        <select id="genre" name="genre">
+          <option value="">Any</option>
+          <option value="country-music">Country</option>
+          <option value="rock">Rock</option>
+          <option value="folk">Folk</option>
+          <option value="jazz">Jazz</option>
+          <option value="bluegrass">Bluegrass</option>
+          <option value="edm">EDM</option>
+          <option value="hip-hop-rap">Hip-Hop / Rap</option>
+          <option value="blues">Blues</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="sort">Sort</label>
+        <select id="sort" name="sort">
+          <option value="date">Soonest</option>
+          <option value="relevance">Best match</option>
+        </select>
+      </div>
+      <button type="submit" class="search-btn">Search</button>
+    </form>
+
+    <div id="banner" class="banner" hidden></div>
+    <div id="meta" class="meta" hidden></div>
+
+    <section id="results" class="results" aria-live="polite"></section>
+  </main>
+
+  <footer class="footer">
+    Event data from the <a href="https://data.jambase.com" target="_blank" rel="noopener">JamBase Concert Data API</a>.
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
