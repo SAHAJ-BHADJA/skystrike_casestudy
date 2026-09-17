@@ -1,14 +1,22 @@
-"""End-to-end API tests against the zero-setup sample-data path."""
+"""End-to-end API tests against the zero-setup sample-data path.
+
+These tests pin the service to the sample provider so they're hermetic — they
+pass identically whether or not a real JAMBASE_API_KEY is set in the environment.
+"""
 import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
+from app.providers.sample import SampleProvider
+from app.services.events_service import EventsService
 
 
 @pytest.fixture
 def client():
     # `with` runs the lifespan, which builds app.state.events_service.
     with TestClient(app) as c:
+        # Force sample mode regardless of local .env, for deterministic assertions.
+        app.state.events_service = EventsService([SampleProvider()], sample_data=True)
         yield c
 
 

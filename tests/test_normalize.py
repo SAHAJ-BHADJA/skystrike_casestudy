@@ -69,3 +69,28 @@ def test_map_event_handles_missing_fields():
 def test_price_from_single_price_field():
     ev = map_event({"name": "x", "offers": [{"priceSpecification": {"price": 30, "priceCurrency": "USD"}}]})
     assert ev.price.min == 30 and ev.price.max == 30
+
+
+def test_empty_string_numerics_are_tolerated():
+    # Live JamBase sends "" for absent capacity/geo/price — must not blow up.
+    ev = map_event(
+        {
+            "name": "Edge",
+            "location": {
+                "name": "V",
+                "maximumAttendeeCapacity": "",
+                "geo": {"latitude": "", "longitude": ""},
+            },
+            "offers": [{"priceSpecification": {"minPrice": "", "priceCurrency": ""}}],
+        }
+    )
+    assert ev.venue.capacity is None
+    assert ev.venue.geo is None
+    assert ev.price is None
+
+
+def test_numeric_strings_are_parsed():
+    ev = map_event(
+        {"name": "x", "offers": [{"priceSpecification": {"minPrice": "25", "maxPrice": "60"}}]}
+    )
+    assert ev.price.min == 25 and ev.price.max == 60

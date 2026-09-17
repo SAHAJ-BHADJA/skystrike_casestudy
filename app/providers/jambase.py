@@ -48,12 +48,26 @@ def _flatten_region(region: object) -> str | None:
 SOURCE_KEY = "jambase"
 
 
+def _to_number(value: object, cast):
+    """Coerce a possibly-empty/stringy upstream value; return None on failure.
+
+    Live JamBase data sends empty strings for absent numerics (e.g. venue
+    capacity ""), so we can't trust the declared type — parse defensively.
+    """
+    if value is None or value == "":
+        return None
+    try:
+        return cast(value)
+    except (TypeError, ValueError):
+        return None
+
+
 def _venue(loc: dict) -> Venue:
     addr = loc.get("address") or {}
     geo = loc.get("geo") or {}
-    point = None
-    if geo.get("latitude") is not None and geo.get("longitude") is not None:
-        point = GeoPoint(latitude=geo["latitude"], longitude=geo["longitude"])
+    lat = _to_number(geo.get("latitude"), float)
+    lon = _to_number(geo.get("longitude"), float)
+    point = GeoPoint(latitude=lat, longitude=lon) if lat is not None and lon is not None else None
     return Venue(
         name=loc.get("name"),
         street=addr.get("streetAddress"),
@@ -63,7 +77,7 @@ def _venue(loc: dict) -> Venue:
         postal_code=addr.get("postalCode"),
         timezone=addr.get("x-timezone"),
         geo=point,
-        capacity=loc.get("maximumAttendeeCapacity"),
+        capacity=_to_number(loc.get("maximumAttendeeCapacity"), int),
     )
 
 
@@ -90,14 +104,16 @@ def _price(offers: list) -> Price | None:
     currency: str | None = None
     for offer in offers:
         spec = (offer or {}).get("priceSpecification") or {}
-        currency = currency or spec.get("priceCurrency")
+        currency = currency or (spec.get("priceCurrency") or None)
         for key in ("minPrice", "price"):
-            if isinstance(spec.get(key), (int, float)):
-                mins.append(float(spec[key]))
+            val = _to_number(spec.get(key), float)
+            if val is not None:
+                mins.append(val)
                 break
         for key in ("maxPrice", "price"):
-            if isinstance(spec.get(key), (int, float)):
-                maxes.append(float(spec[key]))
+            val = _to_number(spec.get(key), float)
+            if val is not None:
+                maxes.append(val)
                 break
     if not mins and not maxes:
         return None
