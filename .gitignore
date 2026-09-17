@@ -25,3 +25,7 @@ Thumbs.db
 
 # Claude Code local
 .claude/
+
+# Private interview prep — never publish
+PRESENTATION.md
+docs/screenshot-map.png.bak
