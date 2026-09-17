@@ -1,9 +1,8 @@
 # Writeup — Local Events Discovery
 
-**Time spent:** ~3 hours (≈20 min API research, ≈70 min backend, ≈25 min UI,
-≈20 min tests + docs, ≈15 min live-API verification + a data-quality fix it caught,
-≈40 min a second pass adding decision features — "near me", filters, calendar, map).
-Kept focused per the brief; the backend spine was built first, features layered after.
+**Time spent:** ~2 hours (≈15 min API research, ≈55 min backend, ≈25 min UI,
+≈25 min tests + docs). Kept intentionally focused per the brief — backend spine first,
+UI second.
 
 **Verified against live JamBase.** Runs on real v3 data with a key, and on bundled
 sample data without one. Live testing immediately paid off — see the reliability note below.
@@ -73,8 +72,8 @@ genre tags. It's a responsive grid, dark-themed, with loading/empty/error states
 and a "sample data" banner so the reviewer always knows what they're looking at.
 It does one initial search on load so the page is never empty.
 
-To make discovery feel first-class (and to match how the category leaders behave),
-a second pass added the features that most help a user *act*:
+Beyond the core list, the UI includes the features that most help a user *act*
+(and match how the category leaders behave):
 
 - **"Use my location"** — browser geolocation → `lat/lon` + radius, so "events near
   me" needs zero typing. (The backend already accepted coordinates; this just

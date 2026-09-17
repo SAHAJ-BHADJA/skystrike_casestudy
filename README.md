@@ -46,16 +46,60 @@ The app now queries JamBase live; the banner disappears.
 
 ---
 
-## Using it
+## Features
 
-- Search by **city** (+ optional state), or tap **"Use my location"** (browser GPS
-  → lat/lon + radius). The API also accepts `lat`/`lon` directly.
-- Filter by **date preset** (Today / This weekend / Next 7 days) or explicit range,
-  **genre**, **max price**, and a **free-only** toggle; sort by **soonest** or **best match**.
-- Toggle between a **list** and an interactive **map** of venues.
-- Each card surfaces the facts you actually decide on — price/free, how soon it is,
-  venue size (intimate → arena), distance, lineup depth — plus **artist links** and a
-  one-click **Add-to-calendar (.ics)** download.
+City or **"Use my location"** search · date / genre / max-price / free-only filters ·
+**list & map** views · decision signals (price, timing, venue size, distance, lineup) ·
+artist links · one-click **add-to-calendar (.ics)**. Backend-first: a provider
+abstraction, resilient HTTP (retry + backoff, 429-aware), TTL caching, and a
+zero-setup sample mode.
+
+## How it works
+
+### User flow
+
+```text
+ Open app
+    │
+    ▼
+ Choose a location ──┬─ type City (+ State)
+    │                └─ or tap "Use my location"  (browser GPS)
+    ▼
+ (optional) Refine:  When · Genre · Max $ · Free-only · Sort
+    │
+    ▼
+ Browse results ─────────────────►  switch  List  ⇄  Map
+    │
+    ├─ scan signals: price/free · how soon · venue size · distance · lineup
+    ├─ open artist links  /  event "Details"
+    └─ tap "+ Calendar" ─► download .ics ─► add to personal calendar
+```
+
+### System flow
+
+```text
+ Browser  (web/app.js)
+    │  GET /api/events?city=&state=&when=&genre=&max_price=&free_only=&sort=
+    ▼
+ FastAPI route  (api/routes.py)
+    │  validate input · expand date presets ─► EventQuery
+    ▼
+ EventsService  (services/events_service.py)
+    │  concurrent fan-out to providers
+    ▼
+ ┌──────────────────────── EventProvider ────────────────────────┐
+ │ JamBaseProvider (jambase.py)      [+ future: Ticketmaster, …]  │
+ │   1. resolve City → geoCityId ....... TTL cache (geo, 1 day)   │
+ │   2. GET JamBase /events ............ ResilientClient          │
+ │                                        (retry+backoff+jitter,  │
+ │                                         429 / Retry-After)     │
+ │                                       TTL cache (events, 5 min)│
+ │   3. map_event() .................... normalized Event         │
+ └───────────────────────────────────────────────────────────────┘
+    │  merge → dedupe → filter (free/price) → rank + enrich → sort
+    ▼
+ EventSearchResponse (JSON) ─► Browser renders  List / Map
+```
 
 ## API
 
