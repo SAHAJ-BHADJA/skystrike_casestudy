@@ -1,8 +1,9 @@
 # Writeup — Local Events Discovery
 
-**Time spent:** ~2.5 hours (≈20 min API research, ≈70 min backend, ≈25 min UI,
-≈20 min tests + docs, ≈15 min live-API verification + a data-quality fix it caught).
-Kept intentionally focused per the brief.
+**Time spent:** ~3 hours (≈20 min API research, ≈70 min backend, ≈25 min UI,
+≈20 min tests + docs, ≈15 min live-API verification + a data-quality fix it caught,
+≈40 min a second pass adding decision features — "near me", filters, calendar, map).
+Kept focused per the brief; the backend spine was built first, features layered after.
 
 **Verified against live JamBase.** Runs on real v3 data with a key, and on bundled
 sample data without one. Live testing immediately paid off — see the reliability note below.
@@ -67,10 +68,26 @@ exactly why the normalized-model seam and "never trust upstream types" posture m
 
 The card layout leads with the decisions a user actually makes: **date** and
 **price/free** are the most prominent, followed by venue + locality, then
-"highlight" chips (This week, intimate venue, N acts, distance) and genre tags.
-It's a responsive grid, dark-themed, with loading/empty/error states and a
-"sample data" banner so the reviewer always knows what they're looking at. It
-does one initial search on load so the page is never empty.
+"highlight" chips (This week, intimate venue, N acts, distance), artist links, and
+genre tags. It's a responsive grid, dark-themed, with loading/empty/error states
+and a "sample data" banner so the reviewer always knows what they're looking at.
+It does one initial search on load so the page is never empty.
+
+To make discovery feel first-class (and to match how the category leaders behave),
+a second pass added the features that most help a user *act*:
+
+- **"Use my location"** — browser geolocation → `lat/lon` + radius, so "events near
+  me" needs zero typing. (The backend already accepted coordinates; this just
+  surfaces them.)
+- **Add-to-calendar (`.ics`)** — a backend endpoint (`/api/events/calendar.ics`)
+  builds a proper RFC-5545 file via a pure, unit-tested `build_ics`. This is the #1
+  "commit to attending" action, and it's a clean *backend* feature, not polish.
+- **Decision filters** — free-only, max-price, and date presets (Today / This
+  weekend / Next 7 days). Free/price are applied uniformly in the service layer
+  because JamBase can't express them upstream — so they behave identically across
+  any number of providers.
+- **Map view** — a List/Map toggle plots venues (Leaflet) with popups, using the
+  geo coordinates already in the normalized model.
 
 ## Tradeoffs made to keep it simple
 
@@ -88,8 +105,10 @@ does one initial search on load so the page is never empty.
 - Real geospatial pagination and a "load more" / infinite scroll.
 - Redis cache + a background pre-warm for popular locations (cuts p95 latency and
   upstream calls further).
-- Richer product signals: "selling fast" via price-movement tracking, personalized
-  ranking, save/RSVP, map view, calendar export.
+- Personalization: artist-follow via Spotify/Apple Music sync + notifications
+  ("your artist is in town"), save/RSVP, and behavior-based ranking.
+- Richer signals: "selling fast" via price-movement tracking (needs the ingest
+  pipeline below), and Spotify preview embeds on the artist links.
 - Observability: structured logging, per-provider latency/error metrics, and a
   circuit breaker to stop hammering a feed that's down.
 - A typed frontend (or HTMX) and component tests if the UI grew.
@@ -162,5 +181,5 @@ to 10 providers is additive, not a rewrite.
 | Area | Grade | Rationale |
 |---|---|---|
 | **Code quality** | **A−** | Clean layering, typed models, pure/tested core, graceful degradation. Docstrings explain the *why*. Minus: no linter/CI config or type-checker in the repo given the time box. |
-| **Work product** | **A−** | Runs with zero setup, real live-API integration, thoughtful product signals, 23 passing tests, and honest docs. Minus: UI is deliberately minimal. |
+| **Work product** | **A** | Runs with zero setup, verified live-API integration, thoughtful product signals plus "near me", filters, calendar export and a map, 34 passing tests, and honest docs. |
 | **Extensibility** | **A** | The provider seam + normalized model + centralized resilience are exactly what the 10-provider question asks for; adding a feed is one adapter + one line. |

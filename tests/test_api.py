@@ -56,3 +56,33 @@ def test_genre_filter_narrows_results(client):
 def test_relevance_sort_is_accepted(client):
     r = client.get("/api/events", params={"city": "Nashville", "sort": "relevance"})
     assert r.status_code == 200
+
+
+def test_free_only_filter(client):
+    events = client.get("/api/events", params={"city": "Nashville", "free_only": "true"}).json()["events"]
+    assert events and all(e["is_free"] for e in events)
+
+
+def test_max_price_filter(client):
+    events = client.get("/api/events", params={"city": "Nashville", "max_price": 35}).json()["events"]
+    for e in events:
+        assert e["is_free"] or (e["price"] and e["price"]["min"] <= 35)
+
+
+def test_calendar_ics_download(client):
+    # Fixture contains this id.
+    r = client.get("/api/events/calendar.ics", params={"id": "jambase:11500001"})
+    assert r.status_code == 200
+    assert r.headers["content-type"].startswith("text/calendar")
+    assert "attachment" in r.headers["content-disposition"]
+    assert r.text.startswith("BEGIN:VCALENDAR")
+
+
+def test_calendar_ics_missing_event_404(client):
+    r = client.get("/api/events/calendar.ics", params={"id": "jambase:doesnotexist"})
+    assert r.status_code == 404
+
+
+def test_when_preset_accepted(client):
+    r = client.get("/api/events", params={"city": "Nashville", "when": "weekend"})
+    assert r.status_code == 200

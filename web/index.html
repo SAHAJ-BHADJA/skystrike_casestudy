@@ -6,6 +6,7 @@
   <title>Local Events · Discover shows near you</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
@@ -21,56 +22,85 @@
 
   <main class="container">
     <form id="search-form" class="search-card" autocomplete="off">
-      <div class="field grow">
-        <label for="city">City</label>
-        <input id="city" name="city" placeholder="e.g. Nashville" value="Nashville" />
+      <input type="hidden" id="lat" name="lat" />
+      <input type="hidden" id="lon" name="lon" />
+
+      <div class="row">
+        <div class="field grow">
+          <label for="city">City</label>
+          <input id="city" name="city" placeholder="e.g. Nashville" value="Nashville" />
+        </div>
+        <div class="field small">
+          <label for="state">State</label>
+          <input id="state" name="state" placeholder="TN" maxlength="3" value="TN" />
+        </div>
+        <button type="button" id="locate-btn" class="ghost-btn" title="Use my current location">
+          📍 Use my location
+        </button>
       </div>
-      <div class="field small">
-        <label for="state">State</label>
-        <input id="state" name="state" placeholder="TN" maxlength="3" value="TN" />
+
+      <div class="row filters">
+        <div class="field">
+          <label for="when">When</label>
+          <select id="when" name="when">
+            <option value="">Any date</option>
+            <option value="today">Today</option>
+            <option value="weekend">This weekend</option>
+            <option value="week">Next 7 days</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="genre">Genre</label>
+          <select id="genre" name="genre">
+            <option value="">Any</option>
+            <option value="country-music">Country</option>
+            <option value="rock">Rock</option>
+            <option value="folk">Folk</option>
+            <option value="jazz">Jazz</option>
+            <option value="bluegrass">Bluegrass</option>
+            <option value="edm">EDM</option>
+            <option value="hip-hop-rap">Hip-Hop / Rap</option>
+            <option value="blues">Blues</option>
+          </select>
+        </div>
+        <div class="field small">
+          <label for="max_price">Max $</label>
+          <input id="max_price" name="max_price" type="number" min="0" step="5" placeholder="Any" />
+        </div>
+        <div class="field">
+          <label for="sort">Sort</label>
+          <select id="sort" name="sort">
+            <option value="date">Soonest</option>
+            <option value="relevance">Best match</option>
+          </select>
+        </div>
+        <label class="check">
+          <input type="checkbox" id="free_only" name="free_only" value="true" />
+          Free only
+        </label>
+        <button type="submit" class="search-btn">Search</button>
       </div>
-      <div class="field">
-        <label for="date_from">From</label>
-        <input id="date_from" name="date_from" type="date" />
-      </div>
-      <div class="field">
-        <label for="date_to">To</label>
-        <input id="date_to" name="date_to" type="date" />
-      </div>
-      <div class="field">
-        <label for="genre">Genre</label>
-        <select id="genre" name="genre">
-          <option value="">Any</option>
-          <option value="country-music">Country</option>
-          <option value="rock">Rock</option>
-          <option value="folk">Folk</option>
-          <option value="jazz">Jazz</option>
-          <option value="bluegrass">Bluegrass</option>
-          <option value="edm">EDM</option>
-          <option value="hip-hop-rap">Hip-Hop / Rap</option>
-          <option value="blues">Blues</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="sort">Sort</label>
-        <select id="sort" name="sort">
-          <option value="date">Soonest</option>
-          <option value="relevance">Best match</option>
-        </select>
-      </div>
-      <button type="submit" class="search-btn">Search</button>
     </form>
 
     <div id="banner" class="banner" hidden></div>
-    <div id="meta" class="meta" hidden></div>
+
+    <div class="toolbar">
+      <div id="meta" class="meta" hidden></div>
+      <div class="view-toggle" role="tablist">
+        <button type="button" class="toggle active" data-view="list">List</button>
+        <button type="button" class="toggle" data-view="map">Map</button>
+      </div>
+    </div>
 
     <section id="results" class="results" aria-live="polite"></section>
+    <div id="map" hidden></div>
   </main>
 
   <footer class="footer">
     Event data from the <a href="https://data.jambase.com" target="_blank" rel="noopener">JamBase Concert Data API</a>.
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="/static/app.js"></script>
 </body>
 </html>

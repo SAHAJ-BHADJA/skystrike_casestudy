@@ -33,6 +33,7 @@ class EventsService:
         )
 
         merged = self._dedupe(ev for r in results if r.ok for ev in r.events)
+        merged = self._apply_filters(merged, query)
         ranking.enrich(merged, query)
         ordered = ranking.sort_events(merged, query.sort)
 
@@ -43,6 +44,31 @@ class EventsService:
             sources=results,
             sample_data=self._sample_data,
         )
+
+    async def get_event(self, event_id: str) -> Event | None:
+        """Look up one event across providers (first match wins)."""
+        for provider in self._providers:
+            found = await provider.get_event(event_id)
+            if found is not None:
+                return found
+        return None
+
+    @staticmethod
+    def _apply_filters(events: list[Event], query: EventQuery) -> list[Event]:
+        """Decision filters JamBase can't express upstream, applied uniformly.
+
+        Keeping these here (not per-provider) means they behave identically no
+        matter how many feeds contribute events.
+        """
+        out = events
+        if query.free_only:
+            out = [e for e in out if e.is_free]
+        if query.max_price is not None:
+            out = [
+                e for e in out
+                if e.is_free or (e.price and e.price.min is not None and e.price.min <= query.max_price)
+            ]
+        return out
 
     @staticmethod
     def _dedupe(events) -> list[Event]:

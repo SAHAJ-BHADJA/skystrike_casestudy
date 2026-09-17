@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from app.models import EventQuery, ProviderResult
+from app.models import Event, EventQuery, ProviderResult
 
 
 class EventProvider(ABC):
@@ -30,3 +30,11 @@ class EventProvider(ABC):
         single flaky feed never sinks an aggregated multi-provider search.
         """
         raise NotImplementedError
+
+    async def get_event(self, event_id: str) -> Event | None:
+        """Fetch a single event by its namespaced id, or None if not found.
+
+        Used for per-event actions (e.g. calendar export). Returns None rather
+        than raising on lookup failure.
+        """
+        return None

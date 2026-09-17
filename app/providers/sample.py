@@ -11,7 +11,7 @@ import json
 from functools import lru_cache
 from pathlib import Path
 
-from app.models import EventQuery, Pagination, ProviderResult
+from app.models import Event, EventQuery, Pagination, ProviderResult
 from app.providers.base import EventProvider
 from app.providers.jambase import map_event
 
@@ -46,3 +46,9 @@ class SampleProvider(EventProvider):
             events=events,
             pagination=Pagination(page=1, per_page=len(events), total_items=len(events), total_pages=1),
         )
+
+    async def get_event(self, event_id: str) -> Event | None:
+        for raw in _load_raw():
+            if raw.get("identifier") == event_id:
+                return map_event(raw)
+        return None

@@ -9,6 +9,12 @@ a lightweight vanilla-JS UI presents them as a clean, scannable feed.
 > and extensibility. See [`WRITEUP.md`](WRITEUP.md) for the design writeup, AI-usage
 > notes, limitations, the 10-provider evolution plan, and self-grades.
 
+![Local Events — list view](docs/screenshot.png)
+![Local Events — map view](docs/screenshot-map.png)
+
+*Live JamBase data: list view with decision-support signals, artist links, and
+add-to-calendar; interactive venue map.*
+
 ---
 
 ## Quick start (zero setup)
@@ -42,10 +48,14 @@ The app now queries JamBase live; the banner disappears.
 
 ## Using it
 
-- Search by **city** (+ optional state), or hit the API directly with **lat/lon + radius**.
-- Filter by **date range** and **genre**; sort by **soonest** or **best match**.
-- Each card surfaces the facts you actually decide on: price/free, how soon it is,
-  venue size (intimate → arena), distance, and lineup depth.
+- Search by **city** (+ optional state), or tap **"Use my location"** (browser GPS
+  → lat/lon + radius). The API also accepts `lat`/`lon` directly.
+- Filter by **date preset** (Today / This weekend / Next 7 days) or explicit range,
+  **genre**, **max price**, and a **free-only** toggle; sort by **soonest** or **best match**.
+- Toggle between a **list** and an interactive **map** of venues.
+- Each card surfaces the facts you actually decide on — price/free, how soon it is,
+  venue size (intimate → arena), distance, lineup depth — plus **artist links** and a
+  one-click **Add-to-calendar (.ics)** download.
 
 ## API
 
@@ -53,7 +63,8 @@ Interactive docs at **http://localhost:8000/docs** (FastAPI/OpenAPI).
 
 | Endpoint | Description |
 |---|---|
-| `GET /api/events` | Search events. Location via `city`(+`state`) **or** `lat`+`lon`(+`radius_km`). Also: `date_from`, `date_to`, `genre`, `keyword`, `page`, `per_page`, `sort=date\|relevance`. |
+| `GET /api/events` | Search events. Location via `city`(+`state`) **or** `lat`+`lon`(+`radius_km`). Also: `when=today\|weekend\|week`, `date_from`, `date_to`, `genre`, `keyword`, `free_only`, `max_price`, `page`, `per_page`, `sort=date\|relevance`. |
+| `GET /api/events/calendar.ics?id=<event_id>` | Download a single event as an `.ics` calendar file. |
 | `GET /api/health` | Liveness + whether sample data is in use. |
 
 ```bash
@@ -67,8 +78,9 @@ curl "http://localhost:8000/api/events?lat=36.16&lon=-86.78&radius_km=25"
 pytest -q
 ```
 
-23 tests cover normalization, the retry/backoff policy (mocked transport), the
-ranking layer, the live provider path, and the HTTP API.
+34 tests cover normalization (incl. live-data edge cases), the retry/backoff policy
+(mocked transport), the ranking layer, the `.ics` builder, the live provider path,
+and the HTTP API (filters, presets, calendar download).
 
 ## Project layout
 
@@ -86,7 +98,8 @@ app/
     http_client.py      # resilient httpx client: retry + backoff + jitter, 429-aware
     cache.py            # async TTL cache (request reduction)
     ranking.py          # deterministic decision-support signals + scoring
-    events_service.py   # concurrent fan-out, merge, dedupe, enrich, sort
+    calendar.py         # pure RFC-5545 .ics builder
+    events_service.py   # concurrent fan-out, merge, dedupe, filter, enrich, sort
   fixtures/             # sample data in raw JamBase shape
 web/                    # index.html + app.js + styles.css (no build step)
 tests/

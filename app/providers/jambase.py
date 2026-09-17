@@ -255,3 +255,18 @@ class JamBaseProvider(EventProvider):
             return ProviderResult(source=self.key, ok=False, error=str(exc))
         except Exception as exc:  # defensive: a malformed payload shouldn't 500 the API
             return ProviderResult(source=self.key, ok=False, error=f"unexpected: {exc}")
+
+    async def get_event(self, event_id: str) -> Event | None:
+        cache_key = f"jambase:event:{event_id}"
+
+        async def fetch() -> dict:
+            return await self._client.get_json(
+                self._url(f"/events/id/{event_id}"), headers=self._headers
+            )
+
+        try:
+            data = await self._cache.get_or_set(cache_key, self._settings.cache_ttl_seconds, fetch)
+        except UpstreamError:
+            return None
+        event = data.get("event")
+        return map_event(event) if isinstance(event, dict) else None

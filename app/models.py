@@ -90,6 +90,8 @@ class EventQuery(BaseModel):
     date_to: date | None = None
     genre: str | None = None
     keyword: str | None = None          # matches event title
+    free_only: bool = False             # decision filter (applied post-fetch)
+    max_price: float | None = None      # decision filter (applied post-fetch)
 
     page: int = 1
     per_page: int = 30
