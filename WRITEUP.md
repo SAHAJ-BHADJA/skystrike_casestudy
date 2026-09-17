@@ -1,7 +1,11 @@
 # Writeup — Local Events Discovery
 
-**Time spent:** ~2 hours (≈20 min API research, ≈70 min backend, ≈25 min UI,
-≈20 min tests + docs). Kept intentionally focused per the brief.
+**Time spent:** ~2.5 hours (≈20 min API research, ≈70 min backend, ≈25 min UI,
+≈20 min tests + docs, ≈15 min live-API verification + a data-quality fix it caught).
+Kept intentionally focused per the brief.
+
+**Verified against live JamBase.** Runs on real v3 data with a key, and on bundled
+sample data without one. Live testing immediately paid off — see the reliability note below.
 
 ---
 
@@ -51,6 +55,13 @@ routes → EventsService → [EventProvider, ...] → normalized Event
   breakdown so ranking is explainable rather than a black box. It's pure and unit-tested.
 - **Thin API layer**: `routes.py` only validates input (e.g. `lat`/`lon` must be
   paired; a location is required) and delegates. Business logic lives in services.
+
+**Reliability note (found via live testing).** JamBase's live feed sends empty
+strings (`""`) for absent numeric fields like venue capacity — which the OpenAPI
+spec types as a number. The sample data never hit this; the first real query did.
+Because normalization is isolated in one place, the fix was a single defensive
+coercion (`_to_number`) plus a regression test, with zero ripple elsewhere. This is
+exactly why the normalized-model seam and "never trust upstream types" posture matter.
 
 ## UI design decisions
 
